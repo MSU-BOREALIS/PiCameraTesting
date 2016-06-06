@@ -1,3 +1,16 @@
+# -------------------------------------------------------------------
+#     Python script to be used on payload side of RFD still image system
+#
+#  **** Test program for experimenting with ISO settings  ****
+#
+#
+#  **** send serial commands via RFD to run different tests
+#  **** most data and pictures stored on board the payload Pi
+#
+#      initail version used with one camera and no mux
+#    trying to log more data and go through a few sequence loops
+#    adjusting camera setttings, looking at ISO and the exposure
+#-----------------------------------------------------------------------
 import time, threading
 from time import strftime
 import subprocess
@@ -83,7 +96,7 @@ checkOK = ''
 ser = serial.Serial(port = port, baudrate = baud, timeout = timeout)
 pic_interval = 60
 extension = ".jpg"
-folder = "/home/pi/RFD_Pi_Code/%s/" % strftime("%m%d%Y_%H%M%S")
+folder = "/home/pi/Desktop/cameraTest_programs/PiCamera_testing/imageData/%s/" % strftime("%m%d%Y_%H%M%S")
 dir = os.path.dirname(folder)
 if not os.path.exists(dir):
     os.mkdir(dir)
