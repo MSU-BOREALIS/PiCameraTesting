@@ -53,6 +53,7 @@ import ImageFont
 #enable2 = 12                            # variable used for GPIO pin 12 - mux "enable 2"
 
 # broadcom numbering    ***** used by adafruits libraries *****
+#  **** may have to remove GPIO settings if using a mux or other "shield"
 selection = 4
 enable1 = 17
 enable2 = 18
@@ -94,13 +95,16 @@ port  = "/dev/ttyAMA0"
 baud = 38400
 timeout = 5
 
-# ---- Camera Initialization -----
 wordlength = 10000
 checkOK = ''
 ser = serial.Serial(port = port, baudrate = baud, timeout = timeout)
+
 pic_interval = 60
 extension = ".png"
+
+#  ****  folder variable can be machine specific  ****
 folder = "/home/pi/Desktop/cameraTest_programs/PiCameraTesting/imageData/%s/" % strftime("%m%d%Y_%H%M%S")
+
 dir = os.path.dirname(folder)
 if not os.path.exists(dir):
     os.mkdir(dir)
@@ -121,8 +125,8 @@ sharpness = 0
 brightness = 50
 contrast = 0
 saturation = 0
-iso = 400
-camera_annotation = 'hi'                # global variable for camera annottation, initialize to something to prevent dynamic typing from changing type
+iso = 0                               # no defined default, range 0 - 800. some places init to 0 others 100, our gui had it at 400
+camera_annotation = ''                # global variable for camera annottation, initialize to something to prevent dynamic typing from changing type
 cam_hflip = False                       # global variable for camera horizontal flip
 cam_vflip = False                       # global variable for camera vertical flip
 
@@ -168,6 +172,8 @@ def enable_camera_B():
     time.sleep(0.5)                        # ??? are these delays going to mess with timming else where ???
     return
 
+
+'''
 def enable_camera_C():
     global cam_hflip
     global cam_vflip
@@ -193,6 +199,7 @@ def enable_camera_D():
     camera_annotation = 'Camera D'
     time.sleep(0.5)
     return
+'''
 
 ###########################
 # Method is used to reset #
@@ -215,7 +222,7 @@ def reset_cam():
     brightness = 50
     contrast = 0
     saturation = 0
-    iso = 400
+    iso = 100                               # **** iso has no default setting, range 0-800. Stay low, <100 ?
     file = open(folder + "camerasettings.txt","w")
     file.write(str(width)+"\n")
     file.write(str(height)+"\n")
