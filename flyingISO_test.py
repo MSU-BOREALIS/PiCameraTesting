@@ -14,6 +14,10 @@
 #      initail version used with one camera and no mux
 #    trying to log more data and go through a few sequence loops
 #    adjusting camera setttings, looking at ISO and the exposure
+#
+#             *** NED TO MODIFY ground station code             ****
+#             ****          to send appropriate serial commands ****
+#
 #-----------------------------------------------------------------------
 import time, threading
 from time import strftime
@@ -33,18 +37,8 @@ from array import array
 import RPi.GPIO as GPIO
 
 
-#------------
-    #Adafruit
 
-#import Adafruit_GPIO.SPI as SPI
-#import Adafruit_SSD1306
-
-#import Image
-#import ImageDraw
-#import ImageFont
-
-
-
+# -------------------------    GPIO inits  ---------------------------------------------
 # ------- Raspberry Pi pin configuration: -----
 # camera mux enable pins
 # board numbering
@@ -58,48 +52,27 @@ selection = 4
 enable1 = 17
 enable2 = 18
 
-'''
-RST = 24
-try:
-    disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
-    # Initialize library.
-    disp.begin()
-    # Clear display.
-    disp.clear()
-    disp.display()
-
-    # Create blank image for drawing.
-    # Make sure to create image with mode '1' for 1-bit color.
-    width = disp.width
-    height = disp.height
-    # Get drawing object to draw on image.
-    draw = ImageDraw.Draw(image)
-
-    # Draw a black filled box to clear the image.3
-    draw.rectangle((0,0,width,height), outline=0, fill=0)
+# GPIO.setmode(GPIO.BOARD)        # use board numbering for GPIO header vs broadcom **** broadcom used in adafruit library dependant stuff ****
+GPIO.setmode(GPIO.BCM)           # broadcom numbering, may not matter if not using oled or any adafruit libraries that need BCM
+# GPIO settings for camera mux
+GPIO.setup(selection, GPIO.OUT)         # mux "select"
+GPIO.setup(enable1, GPIO.OUT)           # mux "enable1"
+GPIO.setup(enable2, GPIO.OUT)           # mux "enable2"
+# -------------------------------------------------------------------------------------------
 
 
-   # Load default font.
-    font = ImageFont.load_default()
-    # Display image.
-    disp.image(image)
-    disp.display()
-except:
-    i2cpresentflag = 1
-
-#I2C check value
-i2cpresentflag = 1
-'''
-
+#  ---------------------  Comms inits ----------------------
 #Serial Variables
 port  = "/dev/ttyAMA0"
 baud = 38400
 timeout = 5
-
 wordlength = 10000
 checkOK = ''
 ser = serial.Serial(port = port, baudrate = baud, timeout = timeout)
+#  ----------------------------------------------------------
 
+
+#  ----------------  camera and directory inits ----------------------------------
 pic_interval = 60
 extension = ".png"
 
@@ -114,11 +87,28 @@ imageDataFile = open(folder + "imagedata.txt","w")
 imageDataFile.write("")
 imageDataFile.close()
 
+class Unbuffered:
+    def __init__(self,stream):
+        self.stream = stream
+    def write(self,data):
+        self.stream.write(data)
+        self.stream.flush()
+        logfile.write(data)
+        logfile.flush()
+
+logfile = open(folder+"piruntimedata.txt","w")
+logfile.close()
+logfile = open(folder+"piruntimedata.txt","a")
+sys.stdout = Unbuffered(sys.stdout)
+imagenumber = 0
+recentimg = ""
+reset_cam()
+
 ###########################
 # Initial Camera Settings #
 ###########################
 
-#Camera Settings
+#Camera Settings -- global variables
 width = 650
 height = 450 
 resolution = (width,height)
@@ -131,13 +121,11 @@ camera_annotation = ''                # global variable for camera annottation, 
 cam_hflip = True                      # global variable for camera horizontal flip, if vflip, need to hflip to avoid mirrior image
 cam_vflip = True                      # global variable for camera vertical flip   True if ribbon cable/csi socket is on "top" of camera
 
-# GPIO settings for camera mux
-# GPIO.setmode(GPIO.BOARD)        # use board numbering for GPIO header vs broadcom **** broadcom used in adafruit library dependant stuff ****
-GPIO.setmode(GPIO.BCM)           # broadcom numbering, may not matter if not using oled or any adafruit libraries that need BCM
-GPIO.setup(selection, GPIO.OUT)         # mux "select"
-GPIO.setup(enable1, GPIO.OUT)           # mux "enable1"
-GPIO.setup(enable2, GPIO.OUT)           # mux "enable2"
 
+
+
+
+#  ------------------------  Method/function defs  -----------------
 
 ###############################
 # Cameras B-D are used in the #
@@ -313,29 +301,16 @@ def send_image(exportpath, wordlength):
     print "Send Time =", (time.time() - timecheck)
     return
 
-class Unbuffered:
-    def __init__(self,stream):
-        self.stream = stream
-    def write(self,data):
-        self.stream.write(data)
-        self.stream.flush()
-        logfile.write(data)
-        logfile.flush()
 
-logfile = open(folder+"piruntimedata.txt","w")
-logfile.close()
-logfile = open(folder+"piruntimedata.txt","a")
-sys.stdout = Unbuffered(sys.stdout)
-imagenumber = 0
-recentimg = ""
-reset_cam()
+#  ------------- last inits -------------------------
 starttime = time.time()
 print "Startime @ ",starttime
 checkpoint = time.time()
 
 enable_camera_A()          # initialize the camera to something so mux is not floating
                            # maybe remove enabling camera if not using mxu???
-
+# ----------  last of inits and start program loop --
+#  ------------  starting program loop  ----------------------------
 
 while(True):
     print "RT:",int(time.time() - starttime),"Watching Serial"
