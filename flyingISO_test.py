@@ -39,9 +39,9 @@ import RPi.GPIO as GPIO
 #import Adafruit_GPIO.SPI as SPI
 #import Adafruit_SSD1306
 
-import Image
-import ImageDraw
-import ImageFont
+#import Image
+#import ImageDraw
+#import ImageFont
 
 
 
@@ -133,6 +133,7 @@ cam_vflip = True                      # global variable for camera vertical flip
 
 # GPIO settings for camera mux
 # GPIO.setmode(GPIO.BOARD)        # use board numbering for GPIO header vs broadcom **** broadcom used in adafruit library dependant stuff ****
+GPIO.setmode(GPIO.BCM)           # broadcom numbering, may not matter if not using oled or any adafruit libraries that need BCM
 GPIO.setup(selection, GPIO.OUT)         # mux "select"
 GPIO.setup(enable1, GPIO.OUT)           # mux "enable1"
 GPIO.setup(enable2, GPIO.OUT)           # mux "enable2"
