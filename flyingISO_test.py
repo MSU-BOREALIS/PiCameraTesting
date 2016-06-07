@@ -103,15 +103,15 @@ pic_interval = 60
 extension = ".png"
 
 #  ****  folder variable can be machine specific  ****
-folder = "/home/pi/Desktop/cameraTest_programs/PiCameraTesting/imageData/%s/" % strftime("%m%d%Y_%H%M%S")
+folder = "/home/pi/Desktop/PiCameraTesting/imagesAndData/%s/" % strftime("%m%d%Y_%H%M%S")
 
 dir = os.path.dirname(folder)
 if not os.path.exists(dir):
     os.mkdir(dir)
     
-fh = open(folder + "imagedata.txt","w")
-fh.write("")
-fh.close()
+imageDataFile = open(folder + "imagedata.txt","w")
+imageDataFile.write("")
+imageDataFile.close()
 
 ###########################
 # Initial Camera Settings #
@@ -222,7 +222,7 @@ def reset_cam():
     brightness = 50
     contrast = 0
     saturation = 0
-    iso = 100                               # **** iso has no default setting, range 0-800. Stay low, <100 ?
+    iso = 0                               # **** iso has no default setting, range 0-800. Stay low, <100 ?
     file = open(folder + "camerasettings.txt","w")
     file.write(str(width)+"\n")
     file.write(str(height)+"\n")
@@ -332,6 +332,7 @@ print "Startime @ ",starttime
 checkpoint = time.time()
 
 enable_camera_A()          # initialize the camera to something so mux is not floating
+                           # maybe remove enabling camera if not using mxu???
 
 
 while(True):
@@ -529,8 +530,8 @@ while(True):
         camera.capture(folder+"%s%04d%s" %("image",imagenumber,"_a"+extension))
         print "( 2592 , 1944 ) photo saved"
         #UpdateDisplay()
-        fh = open(folder+"imagedata.txt","a")
-        fh.write("%s%04d%s @ time(%s) settings(w=%d,h=%d,sh=%d,b=%d,c=%d,sa=%d,i=%d)\n" % ("image",imagenumber,"_a"+extension,str(datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")),2592,1944,sharpness,brightness,contrast,saturation,iso))
+        imageDataFile = open(folder+"imagedata.txt","a")
+        imageDataFile.write("%s%04d%s @ time(%s) settings(w=%d,h=%d,sh=%d,b=%d,c=%d,sa=%d,i=%d)\n" % ("image",imagenumber,"_a"+extension,str(datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")),2592,1944,sharpness,brightness,contrast,saturation,iso))
         camera.resolution = (width,height)
         extension = '.jpg'
         camera.hflip = cam_hflip
@@ -538,14 +539,14 @@ while(True):
         camera.annotate_text = camera_annotation
         camera.capture(folder+"%s%04d%s" %("image",imagenumber,"_b"+extension))
         print "(",width,",",height,") photo saved"
-        fh.write("%s%04d%s @ time(%s) settings(w=%d,h=%d,sh=%d,b=%d,c=%d,sa=%d,i=%d)\n" % ("image",imagenumber,"_b"+extension,str(datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")),width,height,sharpness,brightness,contrast,saturation,iso))
+        imageDataFile.write("%s%04d%s @ time(%s) settings(w=%d,h=%d,sh=%d,b=%d,c=%d,sa=%d,i=%d)\n" % ("image",imagenumber,"_b"+extension,str(datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")),width,height,sharpness,brightness,contrast,saturation,iso))
         print "settings file updated"
         #camera.stop_preview()
         camera.close()
         #print "camera closed"
         recentimg = "%s%04d%s" %("image",imagenumber,"_b"+extension)
         #print "resent image variable updated"
-        fh.close()
+        imageDataFile.close()
         #print "settings file closed"
         print "Most Recent Image Saved as", recentimg
         imagenumber += 1
