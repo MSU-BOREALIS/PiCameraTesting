@@ -103,7 +103,7 @@ pic_interval = 60
 extension = ".png"
 
 #  ****  folder variable can be machine specific  ****
-folder = "/home/pi/Desktop/PiCameraTesting/imagesAndData/%s/" % strftime("%m%d%Y_%H%M%S")
+folder = "/home/pi/Desktop/PiCameraTesting/%s/" % strftime("%m%d%Y_%H%M%S")
 
 dir = os.path.dirname(folder)
 if not os.path.exists(dir):
