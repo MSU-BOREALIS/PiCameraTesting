@@ -219,7 +219,7 @@ def iso_test():
             camera.annotate_background = picamera.Color('black')
             camera.annotate_text = camera_annotation
             #camera.start_preview()
-            for y in range(0,4)
+            for y in range(0,4):
                 camera.capture(folder+"%s%04d%s" %("image",imagenumber,"_a"+extension))
                 print "( 2592 , 1944 ) photo saved"
                 #UpdateDisplay()
