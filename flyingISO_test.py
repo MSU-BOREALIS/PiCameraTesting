@@ -190,6 +190,54 @@ def enable_camera_D():
     time.sleep(0.5)
     return
 '''
+def iso_test():
+    global width
+    global height
+    global sharpness
+    global brightness
+    global contrast
+    global saturation
+    global iso
+    global imagenumber
+    for x in xrange(1,10):
+        try:
+            camera.sharpness = sharpness
+            camera.brightness = brightness
+            camera.contrast = contrast
+            camera.saturation = saturation
+            camera.iso = iso
+            #camera.annotate_text = "Image:" + str(imagenumber)
+            camera.resolution = (2592,1944)
+            extension = '.png'
+            camera.hflip = cam_hflip
+            camera.vflip = cam_vflip
+            camera.annotate_background = picamera.Color('black')
+            camera.annotate_text = camera_annotation
+            #camera.start_preview()
+            camera.capture(folder+"%s%04d%s" %("image",imagenumber,"_a"+extension))
+            print "( 2592 , 1944 ) photo saved"
+            #UpdateDisplay()
+            imageDataFile = open(folder+"imagedata.txt","a")
+            imageDataFile.write("%s%04d%s @ time(%s) settings(w=%d,h=%d,sh=%d,b=%d,c=%d,sa=%d,i=%d)\n" % ("image",imagenumber,"_a"+extension,str(datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")),2592,1944,sharpness,brightness,contrast,saturation,iso))
+            print "settings file updated"
+
+        except:
+            camera.close()
+            os.system('sudo reboot')
+
+        finally:
+            camera.close()
+            imagenumber += 1
+            iso += 50
+
+    print'ISO test Complete ', time.time()
+    reset_cam()
+    print 'camera settings reset to defaults'
+
+#  --- end ISO test  --------
+
+
+
 
 ###########################
 # Method is used to reset #
@@ -502,6 +550,8 @@ while(True):
         camera.saturation = saturation
         camera.iso = iso
         #camera.annotate_text = "Image:" + str(imagenumber)
+
+        # ----- High res picture ------
         camera.resolution = (2592,1944)
         extension = '.png'
         camera.hflip = cam_hflip
@@ -514,6 +564,9 @@ while(True):
         #UpdateDisplay()
         imageDataFile = open(folder+"imagedata.txt","a")
         imageDataFile.write("%s%04d%s @ time(%s) settings(w=%d,h=%d,sh=%d,b=%d,c=%d,sa=%d,i=%d)\n" % ("image",imagenumber,"_a"+extension,str(datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")),2592,1944,sharpness,brightness,contrast,saturation,iso))
+        print "settings file updated"
+
+        # ---- Low res picture  ---------
         camera.resolution = (width,height)
         extension = '.jpg'
         camera.hflip = cam_hflip
