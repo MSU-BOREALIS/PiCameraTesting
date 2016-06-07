@@ -127,8 +127,8 @@ contrast = 0
 saturation = 0
 iso = 0                               # no defined default, range 0 - 800. some places init to 0 others 100, our gui had it at 400
 camera_annotation = ''                # global variable for camera annottation, initialize to something to prevent dynamic typing from changing type
-cam_hflip = False                       # global variable for camera horizontal flip
-cam_vflip = False                       # global variable for camera vertical flip
+cam_hflip = True                      # global variable for camera horizontal flip, if vflip, need to hflip to avoid mirrior image
+cam_vflip = True                      # global variable for camera vertical flip   True if ribbon cable/csi socket is on "top" of camera
 
 # GPIO settings for camera mux
 # GPIO.setmode(GPIO.BOARD)        # use board numbering for GPIO header vs broadcom **** broadcom used in adafruit library dependant stuff ****
@@ -152,9 +152,9 @@ def enable_camera_A():
     GPIO.output(enable2, True)          # pin that needs to be high set first to avoid enable 1 and 2 being low at same time
     GPIO.output(enable1, False)         # if coming from a camera that had enable 2 low then we set enable 1 low on next camera
     #GPIO.output(enable2, True)         # first, we would have both enables low at the same time
-    cam_hflip = False
-    cam_vflip = False
-    camera_annotation = 'Camera A'
+    cam_hflip = True                    # if vflip is True hflip needs to be true to avoid mirror image
+    cam_vflip = True                    # True if ribbon cable/csi socket is on "top" of camera, false if socket is on "bottom" of camera
+    camera_annotation = ''
     time.sleep(0.5)
     return
 
@@ -166,9 +166,9 @@ def enable_camera_B():
     GPIO.output(enable2, True)
     GPIO.output(enable1, False)
     #GPIO.output(enable2, True)
-    cam_hflip = False
-    cam_vflip = False
-    camera_annotation = 'Camera B'
+    cam_hflip = True                    # if vflip is True hflip needs to be true to avoid mirror image
+    cam_vflip = True                    # True if ribbon cable/csi socket is on "top" of camera, false if socket is on "bottom" of camera
+    camera_annotation = ''
     time.sleep(0.5)                        # ??? are these delays going to mess with timming else where ???
     return
 
