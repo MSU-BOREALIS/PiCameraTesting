@@ -102,7 +102,6 @@ logfile = open(folder+"piruntimedata.txt","a")
 sys.stdout = Unbuffered(sys.stdout)
 imagenumber = 0
 recentimg = ""
-#reset_cam()
 
 ###########################
 # Initial Camera Settings #
@@ -121,6 +120,7 @@ camera_annotation = ''                # global variable for camera annottation, 
 cam_hflip = True                      # global variable for camera horizontal flip, if vflip, need to hflip to avoid mirrior image
 cam_vflip = True                      # global variable for camera vertical flip   True if ribbon cable/csi socket is on "top" of camera
 
+#  -------------------------- end opening inits --------------------
 
 
 
@@ -301,8 +301,10 @@ def send_image(exportpath, wordlength):
     print "Send Time =", (time.time() - timecheck)
     return
 
+#  -----------------  end method defs -------------------------
 
-#  ------------- last inits -------------------------
+
+#  ------------- last inits ----------------------------
 reset_cam()
 starttime = time.time()
 print "Startime @ ",starttime
@@ -310,7 +312,9 @@ checkpoint = time.time()
 
 enable_camera_A()          # initialize the camera to something so mux is not floating
                            # maybe remove enabling camera if not using mxu???
-# ----------  last of inits and start program loop --
+# -------  last of inits and start program loop --------
+
+
 #  ------------  starting program loop  ----------------------------
 
 while(True):
