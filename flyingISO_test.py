@@ -102,7 +102,7 @@ logfile = open(folder+"piruntimedata.txt","a")
 sys.stdout = Unbuffered(sys.stdout)
 imagenumber = 0
 recentimg = ""
-reset_cam()
+#reset_cam()
 
 ###########################
 # Initial Camera Settings #
@@ -303,6 +303,7 @@ def send_image(exportpath, wordlength):
 
 
 #  ------------- last inits -------------------------
+reset_cam()
 starttime = time.time()
 print "Startime @ ",starttime
 checkpoint = time.time()
