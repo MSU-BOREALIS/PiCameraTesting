@@ -37,7 +37,7 @@ import RPi.GPIO as GPIO
     #Adafruit
 
 #import Adafruit_GPIO.SPI as SPI
-import Adafruit_SSD1306
+#import Adafruit_SSD1306
 
 import Image
 import ImageDraw
@@ -58,6 +58,7 @@ selection = 4
 enable1 = 17
 enable2 = 18
 
+'''
 RST = 24
 try:
     disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
@@ -88,7 +89,7 @@ except:
 
 #I2C check value
 i2cpresentflag = 1
-
+'''
 
 #Serial Variables
 port  = "/dev/ttyAMA0"
