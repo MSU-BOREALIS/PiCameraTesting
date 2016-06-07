@@ -199,6 +199,7 @@ def iso_test():
     global saturation
     global iso
     global imagenumber
+    print 'starting ISO test...'
     for x in xrange(1,10):
         try:
             camera.sharpness = sharpness
