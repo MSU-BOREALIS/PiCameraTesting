@@ -502,7 +502,7 @@ while(True):
 
         except:
             print 'Not done, need to implement catch condition for ISO test'
-'''
+    '''
     if (command == 'c'):             # enable camera c
         ser.write('A')
         try:
@@ -513,7 +513,7 @@ while(True):
 
         except:
             print 'Not done, need to implement catch condition for enable camera C'
-'''            
+    '''            
     if (command == 'd'):             # enable camera d
         ser.write('A')
         try:
