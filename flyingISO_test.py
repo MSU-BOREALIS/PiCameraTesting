@@ -199,9 +199,13 @@ def iso_test():
     global saturation
     global iso
     global imagenumber
+    global folder
+
     print 'starting ISO test...'
+
     for x in xrange(1,10):
         try:
+	    camera = picamera.PiCamera()
             camera.sharpness = sharpness
             camera.brightness = brightness
             camera.contrast = contrast
@@ -215,12 +219,14 @@ def iso_test():
             camera.annotate_background = picamera.Color('black')
             camera.annotate_text = camera_annotation
             #camera.start_preview()
-            camera.capture(folder+"%s%04d%s" %("image",imagenumber,"_a"+extension))
-            print "( 2592 , 1944 ) photo saved"
-            #UpdateDisplay()
-            imageDataFile = open(folder+"imagedata.txt","a")
-            imageDataFile.write("%s%04d%s @ time(%s) settings(w=%d,h=%d,sh=%d,b=%d,c=%d,sa=%d,i=%d)\n" % ("image",imagenumber,"_a"+extension,str(datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")),2592,1944,sharpness,brightness,contrast,saturation,iso))
-            print "settings file updated"
+            for y in range(0,4)
+                camera.capture(folder+"%s%04d%s" %("image",imagenumber,"_a"+extension))
+                print "( 2592 , 1944 ) photo saved"
+                #UpdateDisplay()
+                imageDataFile = open(folder+"imagedata.txt","a")
+                imageDataFile.write("%s%04d%s @ time(%s) settings(w=%d,h=%d,sh=%d,b=%d,c=%d,sa=%d,i=%d)\n" % ("image",imagenumber,"_a"+extension,str(datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")),2592,1944,sharpness,brightness,contrast,saturation,iso))
+                print "settings file updated"
+                imagenumber += 1
 
         except:
             camera.close()
@@ -228,7 +234,7 @@ def iso_test():
 
         finally:
             camera.close()
-            imagenumber += 1
+            #imagenumber += 1
             iso += 50
 
     print'ISO test Complete ', time.time()
@@ -541,7 +547,7 @@ while(True):
 
 #Creates a loop to check when a picture needs to be taken
     if (checkpoint < time.time()):
-        camera = picamera.PiCamera()
+         camera = picamera.PiCamera()
         try:
             file = open(folder+"camerasettings.txt","r")
             width = int(file.readline())
