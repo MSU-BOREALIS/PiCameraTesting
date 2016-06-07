@@ -547,7 +547,7 @@ while(True):
 
 #Creates a loop to check when a picture needs to be taken
     if (checkpoint < time.time()):
-         camera = picamera.PiCamera()
+        camera = picamera.PiCamera()
         try:
             file = open(folder+"camerasettings.txt","r")
             width = int(file.readline())
