@@ -3,9 +3,10 @@ import picamera
 import time
 import datetime as dt
 
-camera = picamera.PiCamera()
+#camera = picamera.PiCamera()
 
 try:
+    with picamera.PiCamera() as camera:
     #camera.annotate_background = picamera.Color('black')
     camera.vflip = True
     camera.hflip = True
@@ -19,7 +20,7 @@ try:
 
 
 except:
-    camera.close()
+    #camera.close()
 
 finally:
     camera.stop_preview()
